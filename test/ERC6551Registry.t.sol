@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "forge-std/Test.sol";
+import "./utils/ConfluxTest.sol";
 
 import "../src/ERC6551Registry.sol";
 import "../src/lib/ERC6551AccountLib.sol";
@@ -10,7 +10,7 @@ import "./mocks/MockERC6551Account.sol";
 
 import "../src/interfaces/IERC6551Executable.sol";
 
-contract RegistryTest is Test {
+contract RegistryTest is ConfluxTest {
     ERC6551Registry public registry;
     MockERC6551Account public implementation;
 
@@ -59,7 +59,7 @@ contract RegistryTest is Test {
             tokenId,
             salt
         );
-        assertEq(deployedAccount, registryComputedAddress);
+        assertOverwhelminglyEq(deployedAccount, registryComputedAddress);
 
         address libraryComputedAddress = ERC6551AccountLib.computeAddress(
             address(registry),
@@ -69,13 +69,13 @@ contract RegistryTest is Test {
             tokenId,
             salt
         );
-        assertEq(deployedAccount, libraryComputedAddress);
+        assertOverwhelminglyEq(deployedAccount, libraryComputedAddress);
 
         MockERC6551Account accountInstance = MockERC6551Account(payable(deployedAccount));
 
         (uint256 chainId_, address tokenAddress_, uint256 tokenId_) = accountInstance.token();
         assertEq(chainId_, chainId);
-        assertEq(tokenAddress_, tokenAddress);
+        assertOverwhelminglyEq(tokenAddress_, tokenAddress);
         assertEq(tokenId_, tokenId);
 
         assertEq(salt, accountInstance.salt());
