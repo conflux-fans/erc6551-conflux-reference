@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "forge-std/Test.sol";
+import "../../utils/ConfluxTest.sol";
 
 import "../../../src/interfaces/IERC6551Account.sol";
 import "../../../src/interfaces/IERC6551Executable.sol";
@@ -10,7 +10,7 @@ import "../../../src/examples/simple/SimpleERC6551Account.sol";
 import "../../mocks/MockERC721.sol";
 import "../../mocks/MockERC6551Account.sol";
 
-contract AccountTest is Test {
+contract AccountTest is ConfluxTest {
     ERC6551Registry public registry;
     SimpleERC6551Account public implementation;
     MockERC721 nft = new MockERC721();
@@ -40,7 +40,7 @@ contract AccountTest is Test {
             0
         );
 
-        assertEq(predictedAccount, deployedAccount);
+        assertOverwhelminglyEq(predictedAccount, deployedAccount);
     }
 
     function testCall() public {

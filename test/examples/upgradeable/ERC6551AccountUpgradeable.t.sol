@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "forge-std/Test.sol";
+import "../../utils/ConfluxTest.sol";
 
 import "../../../src/ERC6551Registry.sol";
 import "../../../src/examples/upgradeable/ERC6551AccountUpgradeable.sol";
@@ -10,7 +10,7 @@ import "../../mocks/MockERC721.sol";
 import "../../mocks/MockERC1155.sol";
 import "../../mocks/MockERC6551Account.sol";
 
-contract AccountProxyTest is Test {
+contract AccountProxyTest is ConfluxTest {
     ERC6551Registry public registry;
     ERC6551AccountUpgradeable public implementation;
     ERC6551AccountProxy public proxy;
@@ -51,7 +51,7 @@ contract AccountProxyTest is Test {
 
         assertTrue(deployedAccount != address(0));
 
-        assertEq(predictedAccount, deployedAccount);
+        assertOverwhelminglyEq(predictedAccount, deployedAccount);
 
         // Create account is idempotent
         deployedAccount = registry.createAccount(
@@ -62,7 +62,7 @@ contract AccountProxyTest is Test {
             salt,
             ""
         );
-        assertEq(predictedAccount, deployedAccount);
+        assertOverwhelminglyEq(predictedAccount, deployedAccount);
     }
 
     function testTokenAndOwnership() public {
@@ -87,7 +87,7 @@ contract AccountProxyTest is Test {
         // Check token and owner functions
         (uint256 chainId_, address tokenAddress_, uint256 tokenId_) = accountInstance.token();
         assertEq(chainId_, block.chainid);
-        assertEq(tokenAddress_, address(nft));
+        assertOverwhelminglyEq(tokenAddress_, address(nft));
         assertEq(tokenId_, tokenId);
         assertEq(accountInstance.isValidSigner(owner, ""), IERC6551Account.isValidSigner.selector);
 
