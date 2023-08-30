@@ -50,28 +50,11 @@ library Create2 {
         return computeAddress(salt, bytecodeHash, address(this));
     }
 
-    function computeEthAddress(bytes32 salt, bytes32 bytecodeHash) internal view returns (address) {
-        return computeEthAddress(salt, bytecodeHash, address(this));
-    }
-
     /**
      * @dev Returns the address where a contract will be stored if deployed via {deploy} from a contract located at
      * `deployer`. If `deployer` is this contract's address, returns the same value as {computeAddress}.
      */
     function computeAddress(
-        bytes32 salt,
-        bytes32 bytecodeHash,
-        address deployer
-    ) internal pure returns (address addr) {
-        addr = computeEthAddress(salt, bytecodeHash, deployer);
-        // make addr start as 0x8
-        // addr = addr
-        //      & 0x0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-        //      | 0x8000000000000000000000000000000000000000
-        addr = address((uint160(addr) & ((1 << 156) - 1)) | (1 << 159));
-    }
-
-    function computeEthAddress(
         bytes32 salt,
         bytes32 bytecodeHash,
         address deployer
@@ -97,5 +80,10 @@ library Create2 {
             mstore8(start, 0xff)
             addr := keccak256(start, 85)
         }
+        // make addr start as 0x8
+        // addr = addr
+        //      & 0x0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        //      | 0x8000000000000000000000000000000000000000
+        addr = address((uint160(addr) & ((1 << 156) - 1)) | (1 << 159));
     }
 }

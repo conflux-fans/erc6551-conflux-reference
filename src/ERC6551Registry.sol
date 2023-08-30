@@ -5,7 +5,11 @@ import "./lib/Create2.sol";
 
 import "./interfaces/IERC6551Registry.sol";
 import "./lib/ERC6551BytecodeLib.sol";
-
+/**
+ * A revised version of ERC6551 contract for Conflux
+ * - uses Create2 working in Conflux
+ * - Modified default ERC1167 with constructor setting Admin to zero address
+ */
 contract ERC6551Registry is IERC6551Registry {
     error AccountCreationFailed();
 
@@ -25,11 +29,7 @@ contract ERC6551Registry is IERC6551Registry {
             salt
         );
 
-        address _account = Create2.computeEthAddress(bytes32(salt), keccak256(code));
-
-        if (_account.code.length != 0) return _account;
-
-        _account = Create2.computeAddress(bytes32(salt), keccak256(code));
+        address _account = Create2.computeAddress(bytes32(salt), keccak256(code));
 
         if (_account.code.length != 0) return _account;
 
