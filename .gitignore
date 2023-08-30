@@ -13,3 +13,6 @@ broadcast/
 
 # Node
 node_modules/
+
+.DS_STORE
+settings.json
